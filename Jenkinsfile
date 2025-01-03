@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Récupérer le code depuis le dépôt Git
-                git 'https://votre-depot-git.git'
+                git 'https://github.com/Gaugpo/Chaine-Ci.git'
             }
         }
 
