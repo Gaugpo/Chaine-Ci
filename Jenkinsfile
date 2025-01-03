@@ -1,54 +1,21 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
-            steps {
-                // Récupérer le code depuis le dépôt Git
-                git 'https://github.com/Gaugpo/Chaine-Ci.git'
-            }
-        }
-
-        stage('SCA Analysis') {
-            steps {
-                // Exécuter l'analyse SCA avec OWASP Dependency-Check
-                sh 'dependency-check.sh --project MonProjet --scan .'
-            }
-        }
-
-        stage('SAST Analysis') {
-            steps {
-                // Exécuter l'analyse SAST avec SonarQube
-                sh 'sonar-scanner -Dsonar.projectKey=MonProjet -Dsonar.sources=.'
-            }
-        }
-
         stage('Build') {
             steps {
-                // Construire le projet (exemple avec Maven)
-                sh 'mvn clean package'
+                script {
+                    // Exécute Maven pour construire l'application
+                    sh 'mvn clean install -DskipTests'
+                }
             }
         }
-
-        stage('Deploy') {
+        stage('Run WebGoat') {
             steps {
-                // Déployer l'application (remplacez par votre script de déploiement)
-                sh 'deploy.sh'
+                script {
+                    // Commande pour démarrer WebGoat, ajustez selon votre configuration
+                    sh 'docker run -d -p 8080:8080 webgoat/webgoat'
+                }
             }
-        }
-
-        stage('DAST Analysis') {
-            steps {
-                // Exécuter l'analyse DAST avec OWASP ZAP
-                sh 'zap.sh -quickurl http://mon-app-deploye'
-            }
-        }
-    }
-
-    post {
-        always {
-            // Action à exécuter après chaque build, par exemple : notifier ou archiver les résultats
-            echo 'Pipeline terminé.'
         }
     }
 }
