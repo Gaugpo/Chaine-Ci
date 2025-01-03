@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven 3.9.9' // Remplacez par le nom de votre installation Maven dans Jenkins
+        maven '3.9.9' // Remplacez par le nom de votre installation Maven dans Jenkins
     }
     stages {
         stage('Build') {
